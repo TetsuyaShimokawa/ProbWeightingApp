@@ -1,0 +1,49 @@
+import random
+
+PROB_GRID = [0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8]
+AMOUNT_GRID = list(range(10, 110, 10))  # 10〜100（10刻み）
+TRIALS_PER_BLOCK = 10
+
+
+def generate_trial(N: int, trial_num: int) -> dict:
+    """
+    制約：p > q かつ p^N >= 0.05 かつ q^N >= 0.05 かつ r^N >= 0.05
+    Prelec(1998)の固定点 1/e ≈ 0.37 付近を重点サンプリングするため
+    上記グリッドを使用。
+    """
+    while True:
+        p = random.choice(PROB_GRID)
+        q = random.choice(PROB_GRID)
+        r = random.choice(PROB_GRID)
+        if (
+            p > q
+            and p**N >= 0.05
+            and q**N >= 0.05
+            and r**N >= 0.05
+        ):
+            break
+    x = random.choice(AMOUNT_GRID)
+    x_prime = random.choice(AMOUNT_GRID)
+    block = 1 if N == 2 else 2
+    return {
+        "trial": trial_num,
+        "block": block,
+        "N": N,
+        "p": round(p, 10),
+        "q": round(q, 10),
+        "r": round(r, 10),
+        "x": x,
+        "x_prime": x_prime,
+    }
+
+
+def generate_all_trials() -> list[dict]:
+    """セッション開始時に全20試行を事前生成する。"""
+    trials = []
+    # Block A: N=2, Trial 1-10
+    for i in range(1, TRIALS_PER_BLOCK + 1):
+        trials.append(generate_trial(N=2, trial_num=i))
+    # Block B: N=3, Trial 11-20
+    for i in range(TRIALS_PER_BLOCK + 1, TRIALS_PER_BLOCK * 2 + 1):
+        trials.append(generate_trial(N=3, trial_num=i))
+    return trials

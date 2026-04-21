@@ -1,0 +1,128 @@
+import { useState } from "react";
+import { startSession, saveResult } from "../api/client";
+
+export function useSession() {
+  const [sessionId, setSessionId] = useState(null);
+  const [studentId, setStudentId] = useState("");
+  const [name, setName] = useState("");
+  const [trials, setTrials] = useState([]);
+  const [currentTrialIndex, setCurrentTrialIndex] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0); // 0=setup,1,2,3,4,5=finish,6=block_break
+  const [stepData, setStepData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const currentTrial = trials[currentTrialIndex] ?? null;
+  const totalTrials = trials.length; // 20
+
+  async function handleSetup(sid, sname) {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await startSession(sid, sname);
+      setSessionId(data.session_id);
+      setTrials(data.trials);
+      setStudentId(sid);
+      setName(sname);
+      setCurrentTrialIndex(0);
+      setCurrentStep(1);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function submitStep1(y) {
+    setStepData((prev) => ({ ...prev, y }));
+    setCurrentStep(2);
+  }
+
+  function submitStep2(s) {
+    setStepData((prev) => ({ ...prev, s }));
+    setCurrentStep(3);
+  }
+
+  function submitStep3(yPrime) {
+    setStepData((prev) => ({ ...prev, y_prime: yPrime }));
+    setCurrentStep(4);
+  }
+
+  async function submitStep4(choice) {
+    setLoading(true);
+    setError(null);
+    const trial = currentTrial;
+    const N = trial.N;
+    const pN = parseFloat((trial.p ** N).toFixed(10));
+    const qN = parseFloat((trial.q ** N).toFixed(10));
+    const rN = parseFloat((trial.r ** N).toFixed(10));
+    const sN = parseFloat((stepData.s ** N).toFixed(10));
+    const ciSatisfied = choice === "Indifferent";
+
+    try {
+      await saveResult({
+        session_id: sessionId,
+        student_id: studentId,
+        name,
+        trial: trial.trial,
+        block: trial.block,
+        N,
+        p: trial.p,
+        q: trial.q,
+        r: trial.r,
+        x: trial.x,
+        x_prime: trial.x_prime,
+        y: stepData.y,
+        s: stepData.s,
+        y_prime: stepData.y_prime,
+        pN,
+        qN,
+        rN,
+        sN,
+        choice,
+        ci_satisfied: ciSatisfied,
+      });
+
+      const nextIndex = currentTrialIndex + 1;
+
+      // Block A（10試行）終了後にブロック間休憩画面
+      if (nextIndex === 10 && nextIndex < totalTrials) {
+        setCurrentTrialIndex(nextIndex);
+        setStepData({});
+        setCurrentStep(6); // block break
+      } else if (nextIndex >= totalTrials) {
+        setCurrentStep(5); // finish
+      } else {
+        setCurrentTrialIndex(nextIndex);
+        setStepData({});
+        setCurrentStep(1);
+      }
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function startNextBlock() {
+    setCurrentStep(1);
+  }
+
+  return {
+    sessionId,
+    studentId,
+    trials,
+    currentTrialIndex,
+    currentStep,
+    currentTrial,
+    stepData,
+    loading,
+    error,
+    handleSetup,
+    submitStep1,
+    submitStep2,
+    submitStep3,
+    submitStep4,
+    startNextBlock,
+  };
+}

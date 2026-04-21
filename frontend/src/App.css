@@ -1,0 +1,288 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  background: #f5f7fa;
+  color: #1a1a2e;
+  min-height: 100vh;
+}
+
+/* ===== Screen wrapper ===== */
+.screen {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ===== Progress bar ===== */
+.progress-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.block-label {
+  font-weight: 600;
+  color: #3a86ff;
+}
+
+.progress-track {
+  height: 8px;
+  background: #dde1e9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3a86ff, #8338ec);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* ===== Step label ===== */
+.step-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8338ec;
+  background: #f0eaff;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+/* ===== Question box ===== */
+.question-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.question-box .unknown {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #e63946;
+}
+
+.hint {
+  font-size: 0.82rem;
+  color: #888;
+  margin-top: 4px;
+}
+
+/* ===== Input form ===== */
+.input-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.field input {
+  padding: 12px 14px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  background: #fff;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #3a86ff;
+  box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.15);
+}
+
+/* ===== Buttons ===== */
+.btn-primary {
+  padding: 13px 28px;
+  background: #3a86ff;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  align-self: flex-start;
+}
+
+.btn-primary:hover:not(:disabled) { background: #2563eb; }
+.btn-primary:active:not(:disabled) { transform: scale(0.97); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ===== Error ===== */
+.error {
+  color: #dc2626;
+  font-size: 0.88rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+/* ===== Setup screen ===== */
+.setup-screen {
+  justify-content: center;
+}
+
+.setup-screen h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1a1a2e;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.setup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: #fff;
+  padding: 28px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+/* ===== Step 4: lottery compare ===== */
+.question-intro {
+  font-size: 1rem;
+  color: #444;
+}
+
+.lottery-compare {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.lottery-box {
+  flex: 1;
+  background: #fff;
+  border: 2px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 20px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lottery-x { border-color: #3a86ff; }
+.lottery-y { border-color: #ef476f; }
+
+.lottery-label {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.lottery-x .lottery-label { color: #3a86ff; }
+.lottery-y .lottery-label { color: #ef476f; }
+
+.lottery-detail { font-size: 0.9rem; color: #555; }
+.lottery-amount { font-size: 1.2rem; font-weight: 700; }
+
+.vs-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #999;
+  flex-shrink: 0;
+}
+
+/* ===== Choice buttons ===== */
+.choice-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-choice {
+  flex: 1;
+  padding: 14px 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.btn-choice:active:not(:disabled) { transform: scale(0.96); }
+.btn-choice:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-x { background: #3a86ff; color: #fff; }
+.btn-x:hover:not(:disabled) { background: #2563eb; }
+
+.btn-indifferent { background: #6b7280; color: #fff; }
+.btn-indifferent:hover:not(:disabled) { background: #4b5563; }
+
+.btn-y { background: #ef476f; color: #fff; }
+.btn-y:hover:not(:disabled) { background: #d63059; }
+
+.saving { color: #888; font-size: 0.9rem; }
+
+/* ===== Block break / Finish ===== */
+.break-screen, .finish-screen {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.break-content, .finish-content {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.break-content h2, .finish-content h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.break-content p, .finish-content p {
+  color: #555;
+  line-height: 1.7;
+}
+
+.btn-download {
+  text-decoration: none;
+  margin-top: 8px;
+}
